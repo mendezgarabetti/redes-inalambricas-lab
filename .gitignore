@@ -1,0 +1,12 @@
+node_modules/
+dist/
+exports/
+.presenter-session.json
+# imágenes de disco, discos de VM y claves (se generan; ver laboratorio/README.md)
+*.qcow2
+*.img
+vm-data/
+lab_key
+lab_key.pub
+venv/
+__pycache__/

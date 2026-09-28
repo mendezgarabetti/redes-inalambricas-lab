@@ -1,0 +1,6 @@
+<network>
+  <name>lab1</name>
+  <bridge name="virbr_lab1" stp="on" delay="0"/>
+  <domain name="lab.local"/>
+  <ip address="10.10.10.254" netmask="255.255.255.0"/>
+</network>

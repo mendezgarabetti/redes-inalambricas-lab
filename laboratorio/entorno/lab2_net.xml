@@ -1,0 +1,5 @@
+<network>
+  <name>lab2</name>
+  <bridge name="virbr_lab2" stp="on" delay="0"/>
+  <ip address="10.20.20.254" netmask="255.255.255.0"/>
+</network>
