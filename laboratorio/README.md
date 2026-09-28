@@ -3,7 +3,7 @@
 | Carpeta | Contenido |
 |---|---|
 | `enunciados/` | Enunciados de los siete TP, todos con objetivos, topología, consignas con PRUEBAS numeradas, entregables y criterios de evaluación |
-| `entorno/` | Creación de VMs, redes virtuales y scripts de verificación |
+| `entorno/` | Creación de VMs y redes (libvirt), guía para VirtualBox y scripts de verificación |
 
 | TP | Tema | Enunciado |
 |---|---|---|
@@ -18,6 +18,8 @@
 La guía paso a paso para el estudiante está en `../guia-estudiante/GUIA-ESTUDIANTE-TPs.md`, y la teoría previa a TP1 y TP2, en `../teoria/`.
 
 ## Armar el entorno
+
+Las instrucciones de esta sección son para **KVM/libvirt** (el entorno validado). Para **VirtualBox**, ver [`entorno/VIRTUALBOX.md`](entorno/VIRTUALBOX.md).
 
 ```bash
 cd entorno

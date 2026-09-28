@@ -25,7 +25,7 @@ También: `PREGUNTAS-REPASO.md` (30 preguntas) y `GLOSARIO.md`.
 ### `laboratorio/` · Enunciados y entorno
 
 - `enunciados/`: los siete TP completos (TP1 DHCP/DNS · TP2 routing/NAT · TP3 VLAN/firewall · TP4 portal cautivo · TP5 802.1X/RADIUS · TP6 Wi-Fi virtual · TP7 integrador).
-- `entorno/`: script de creación de VMs, redes libvirt y scripts de verificación. Instrucciones en `laboratorio/README.md`.
+- `entorno/`: script de creación de VMs y redes para libvirt/KVM, guía para VirtualBox (`VIRTUALBOX.md`) y scripts de verificación. Instrucciones en `laboratorio/README.md`.
 
 Las contraseñas y secretos que aparecen en las configuraciones y scripts son **sólo de laboratorio**. Las imágenes de disco, los discos de las VMs y la clave SSH no se incluyen.
 
