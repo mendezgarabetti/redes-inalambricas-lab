@@ -21,11 +21,12 @@ También: `PREGUNTAS-REPASO.md` (30 preguntas) y `GLOSARIO.md`.
 - `GUIA-ESTUDIANTE-TPs.md`: TP1–TP2 (DHCP, DNS, routing, NAT) como repaso operativo y, en profundidad, TP3 VLAN/trunk/firewall, TP4 portal cautivo, TP5 802.1X/EAP/RADIUS, TP6 Wi-Fi virtual (WPA2/WPA3) y TP7 integrador con VLAN dinámica por RADIUS.
 - `configs/`: configuraciones validadas (hostapd, wpa_supplicant, FreeRADIUS, dnsmasq, nftables, portal).
 - `capturas-referencia/`: capturas `.pcap` reales de la validación.
+- `GUIA-COMPLEMENTARIA-MIKROTIK.md` y `configs/mikrotik/`: **actividad complementaria (optativa)** que repite los TP1 a TP4 sobre **MikroTik RouterOS** (CHR): DHCP, DNS, NAT, VLANs, firewall y Hotspot, con la configuración `.rsc` validada.
 
 ### `laboratorio/` · Enunciados y entorno
 
-- `enunciados/`: los siete TP completos (TP1 DHCP/DNS · TP2 routing/NAT · TP3 VLAN/firewall · TP4 portal cautivo · TP5 802.1X/RADIUS · TP6 Wi-Fi virtual · TP7 integrador).
-- `entorno/`: script de creación de VMs y redes para libvirt/KVM, guía para VirtualBox (`VIRTUALBOX.md`) y scripts de verificación. Instrucciones en `laboratorio/README.md`.
+- `enunciados/`: los siete TP completos (TP1 DHCP/DNS · TP2 routing/NAT · TP3 VLAN/firewall · TP4 portal cautivo · TP5 802.1X/RADIUS · TP6 Wi-Fi virtual · TP7 integrador) y la actividad complementaria con MikroTik.
+- `entorno/`: script de creación de VMs y redes para libvirt/KVM, guía para VirtualBox (`VIRTUALBOX.md`) y scripts de verificación. Instrucciones en `laboratorio/README.md`, incluida la creación de la VM del MikroTik.
 
 Las contraseñas y secretos que aparecen en las configuraciones y scripts son **sólo de laboratorio**. Las imágenes de disco, los discos de las VMs y la clave SSH no se incluyen.
 

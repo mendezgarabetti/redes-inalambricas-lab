@@ -121,3 +121,25 @@ y en dnsmasq, `interface=enp0s8`. En el TP2, la regla de NAT usa la interfaz WAN
 ## 7. TP3 a TP7
 
 No requieren nada especial de VirtualBox: VLANs, bridges, namespaces y la radio Wi-Fi virtual (`mac80211_hwsim`) son funciones del kernel de la VM y funcionan igual en cualquier hipervisor. Sólo reemplazá `enp1s0` por `enp0s3` en los comandos que usan la salida a Internet (NAT de nftables y reglas del firewall).
+
+## 8. Actividad complementaria MikroTik
+
+> **No se probó en VirtualBox.** La actividad se validó en KVM/libvirt (ver `laboratorio/README.md`).
+
+MikroTik publica el CHR también como disco **VDI**:
+
+```bash
+wget https://download.mikrotik.com/routeros/7.24.5/chr-7.24.5.vdi.zip
+unzip chr-7.24.5.vdi.zip
+
+VBoxManage createvm --name lab-mikrotik --ostype Linux26_64 --register
+VBoxManage modifyvm lab-mikrotik --memory 256 --cpus 1 \
+    --nic1 nat --nic2 intnet --intnet2 lab1
+VBoxManage storagectl lab-mikrotik --name SATA --add sata --controller IntelAhci
+VBoxManage storageattach lab-mikrotik --storagectl SATA --port 0 --device 0 \
+    --type hdd --medium chr-7.24.5.vdi
+```
+
+- El Adaptador 1 es `ether1` (WAN) y el Adaptador 2 es `ether2` (LAN y trunk de VLANs).
+- `lab-server` (Adaptador 2) y `lab-client` deben estar en la red interna `lab1`.
+- El host **no** está en la red interna: administrá el router desde la ventana de la VM o con `ssh admin@10.10.10.1` desde `lab-client`.

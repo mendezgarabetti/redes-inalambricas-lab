@@ -9,4 +9,7 @@ virsh undefine lab-client --remove-all-storage 2>/dev/null
 virsh destroy lab-router 2>/dev/null
 virsh undefine lab-router --remove-all-storage 2>/dev/null
 
+virsh destroy lab-mikrotik 2>/dev/null
+virsh undefine lab-mikrotik --remove-all-storage 2>/dev/null
+
 echo "Limpieza completada."
