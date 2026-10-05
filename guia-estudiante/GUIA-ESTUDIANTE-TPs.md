@@ -32,6 +32,8 @@ Esta guía te acompaña en el desarrollo de los siete trabajos prácticos. Los *
 
 **Orden recomendado:** TP1 → TP2 → TP3 → TP4 → **TP6 → TP5** → TP7. La parte B del TP5 (802.1X real) usa la radio virtual del TP6, así que conviene hacer primero el TP6.
 
+**Actividad complementaria (optativa):** después del TP4 podés repetir los TP1 a TP4 sobre un router **MikroTik RouterOS**. Ver `GUIA-COMPLEMENTARIA-MIKROTIK.md`.
+
 ---
 
 ## 0. Antes de empezar
@@ -978,6 +980,7 @@ Referencia: `capturas-referencia/tp7-vlan-dinamica-radius.pcap`. Cada `Access-Ac
 | `configs/nftables-tp7.conf` | TP3/TP4/TP7 · firewall, portal y NAT |
 | `configs/portal.py`, `wpa-invitado.conf` | TP4 · portal didáctico y cliente del SSID abierto |
 | `capturas-referencia/*.pcap` | Capturas reales de la validación para comparar con las tuyas |
+| `GUIA-COMPLEMENTARIA-MIKROTIK.md`, `configs/mikrotik/*.rsc` | Actividad complementaria (optativa): TP1 a TP4 sobre MikroTik RouterOS |
 
 ### 9.2 Filtros útiles de Wireshark/tshark
 

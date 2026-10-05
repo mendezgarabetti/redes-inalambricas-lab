@@ -5,6 +5,8 @@ exports/
 # imágenes de disco, discos de VM y claves (se generan; ver laboratorio/README.md)
 *.qcow2
 *.img
+*.vdi
+chr-*.zip
 vm-data/
 lab_key
 lab_key.pub
