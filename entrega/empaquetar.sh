@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Arma el archivo de entrega de un TP: grabaciones, capturas .pcap, configuraciones, estado final de la red y respuestas.
 #
-#   Uso:  sudo bash empaquetar.sh TP3 apellido   [--no-subir]   (con sudo o como root lee configuraciones y el ruleset)
+#   Uso:  sudo bash empaquetar.sh TP3 apellido      (con sudo o como root lee configuraciones y el ruleset)
 #
 # Genera ~/entrega-TP3-apellido-<vm>.tar.gz. En TP1 y TP2 corrélo en cada VM que usaste (sale un archivo por VM).
 # Nunca se corta por un error: si un comando no existe o falla, lo anota y sigue. No modifica nada del sistema.
@@ -141,21 +141,7 @@ echo
 echo "Listo: $FINAL  (${TAM} KB)"
 [ -s "$AVISOS" ] && { echo "Revisá estos avisos:"; sed 's/^/  - /' "$AVISOS"; }
 
-# 7. Subida a la cátedra (si la VM tiene Internet). Si falla, se entrega a mano. --------------------------------
-MANUAL="Subilo a mano a tu canal privado entrega-tu-nombre en Discord (o volvé a correr este script cuando tengas Internet)."
 if [ "$TAM" -gt 9500 ]; then
-  echo "AVISO: pesa más de 9,5 MB y Discord no lo acepta. Borrá capturas que no sean del TP y volvé a empaquetar."; exit 0
+  echo "AVISO: pesa más de 9,5 MB y Discord no lo acepta. Borrá capturas que no sean del TP y volvé a empaquetar."
 fi
-DEST=$(base64 -d "$(cd "$(dirname "$0")" && pwd)/.destino" 2>/dev/null)
-if [ "${3:-}" = "--no-subir" ] || [ -z "$DEST" ]; then echo "$MANUAL"; exit 0; fi
-if ! command -v curl >/dev/null 2>&1; then echo "No está instalado curl. $MANUAL"; exit 0; fi
-echo "Subiendo la entrega a la cátedra..."
-MSG="$TP · $APE · VM $HOST · $(date '+%F %T') · ${TAM} KB"
-COD=$(curl -sS -m 120 -o /dev/null -w '%{http_code}' \
-      -F "payload_json={\"content\":\"$MSG\",\"allowed_mentions\":{\"parse\":[]}}" \
-      -F "files[0]=@$FINAL" "$DEST?wait=true" 2>/dev/null)
-if [ "$COD" = "200" ]; then
-  echo "ENTREGADO: la cátedra recibió $(basename "$FINAL") ($(date '+%F %T')). Guardá este mensaje como comprobante."
-else
-  echo "No se pudo subir (código ${COD:-sin respuesta}): ¿la VM tiene Internet? $MANUAL"
-fi
+echo "Copiá ese archivo a tu computadora (ver entrega/README.md, paso 4) y subilo a tu canal privado entrega-tu-nombre en Discord."

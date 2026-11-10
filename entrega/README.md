@@ -1,8 +1,8 @@
 # Cómo entregar los laboratorios (TP1 a TP7)
 
-Cada TP se entrega como **un archivo `.tar.gz` por VM**, que se arma y se sube solo con dos scripts de esta carpeta.
-No hace falta informe PDF ni capturas de pantalla: la evidencia es la grabación de tu terminal, tus capturas `.pcap` y
-tus configuraciones.
+Cada TP se entrega como **un archivo `.tar.gz` por VM**, que se arma con dos scripts de esta carpeta, y se sube a tu
+canal privado `entrega-tu-nombre` en Discord. No hace falta informe PDF ni capturas de pantalla: la evidencia es la
+grabación de tu terminal, tus capturas `.pcap` y tus configuraciones.
 
 ## 0. Traer los scripts a la VM (una vez)
 
@@ -36,24 +36,28 @@ Para terminar: `exit`. Si seguís otro día, volvé a correr `grabar.sh TP3` y s
 nano ~/entrega-TP3/respuestas.md
 ```
 
-La plantilla ya tiene tu nombre por completar y las preguntas de ese TP. Respondé con lo que observaste **en tu
-laboratorio**, citando la salida o la captura que lo muestra. Si trabajaron en grupo, poné **todos** los nombres.
-Si el TP pide un diagrama, dibujalo en el `.md` o dejá una imagen `diagrama.png` en `~/entrega-TP3/`.
+La plantilla tiene las preguntas de ese TP. Completá tu nombre y respondé con lo que observaste **en tu laboratorio**,
+citando la salida o la captura que lo muestra. Si trabajaron en grupo, poné **todos** los nombres. Si el TP pide un
+diagrama, dibujalo en el `.md` o dejá una imagen `diagrama.png` en `~/entrega-TP3/`.
 
-## 3. Empaquetá y entregá
+## 3. Empaquetá
 
 ```bash
 sudo bash entrega/empaquetar.sh TP3 tu-apellido
 ```
 
-Junta todo en `~/entrega-TP3-tu-apellido-<vm>.tar.gz` y **lo sube automáticamente a la cátedra**. Si ves
-**`ENTREGADO`**, listo: guardá ese mensaje como comprobante. Si un comando no existe o falla, el script lo anota y sigue.
+Arma `~/entrega-TP3-tu-apellido-<vm>.tar.gz`. Si un comando no existe o falla, lo anota y sigue. Al final te avisa si
+falta algo (respuestas, capturas) o si el archivo pesa más de lo que acepta Discord. No modifica nada de tu sistema.
 
-Si la VM no tiene Internet o la subida falla, el archivo igual queda armado. Opciones:
-- **TP1, `lab-client`:** cambiá su red a NAT (VirtualBox: *Configuración → Red → Adaptador 1 → NAT*; libvirt:
-  `virsh detach-interface lab-client network --live` y `virsh attach-interface lab-client network default --live`) y
-  volvé a correr `empaquetar.sh`. Las grabaciones ya están guardadas, no se pierde nada.
-- **Cualquier otro caso:** copiá el `.tar.gz` a tu computadora y subilo a tu canal privado `entrega-tu-nombre` en Discord.
+## 4. Sacá el archivo de la VM y subilo a tu canal privado
 
-El script **no modifica nada** de tu sistema. Contiene tus comandos, salidas, configuraciones (sin claves privadas),
-capturas, la MAC de tus interfaces y tus respuestas.
+- **KVM / libvirt:** desde la terminal de tu computadora, con la clave del laboratorio:
+  `scp -i lab_key root@IP-DE-LA-VM:entrega-TP3-*.tar.gz .` (la IP de `lab-server` la ves con `virsh domifaddr lab-server`).
+- **VirtualBox:** en el adaptador NAT de la VM agregá un reenvío de puertos (*Configuración → Red → Avanzadas → Reenvío de
+  puertos*: TCP, puerto anfitrión 2222, puerto invitado 22), instalá `openssh-server` en la VM y copiá con
+  `scp -P 2222 usuario@127.0.0.1:entrega-TP3-*.tar.gz .`
+- **VM con escritorio:** subilo directamente desde el navegador de la VM.
+- **`lab-client` sin salida (TP1/TP2):** pasalo primero a la otra VM por la red del laboratorio (`scp`) y sacalo desde ahí.
+
+Después subí el `.tar.gz` a tu canal privado **`entrega-tu-nombre`** en Discord. Si no tenés canal, subilo en `#entregas`.
+Si te trabás en este paso, preguntá en `#dudas`.

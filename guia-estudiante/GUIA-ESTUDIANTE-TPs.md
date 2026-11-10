@@ -91,7 +91,7 @@ sudo apt-get install -y dnsmasq tcpdump tshark bind9-dnsutils curl nftables conn
 
 ### 0.4 Qué se entrega en cada TP
 
-Ya no se entrega un informe PDF. Cada TP se entrega con los scripts de [`entrega/`](../entrega/README.md): `grabar.sh` graba tu terminal mientras trabajás (comandos, salidas y errores), `respuestas.md` tiene las preguntas de análisis del TP y `empaquetar.sh` junta la grabación, tus capturas `.pcap`, tus configuraciones y el estado de la red, y lo sube a la cátedra. Detalle paso a paso en `entrega/README.md`.
+Ya no se entrega un informe PDF. Cada TP se entrega con los scripts de [`entrega/`](../entrega/README.md): `grabar.sh` graba tu terminal mientras trabajás (comandos, salidas y errores), `respuestas.md` tiene las preguntas de análisis del TP y `empaquetar.sh` junta la grabación, tus capturas `.pcap`, tus configuraciones y el estado de la red,. Detalle paso a paso en `entrega/README.md`.
 
 ---
 
