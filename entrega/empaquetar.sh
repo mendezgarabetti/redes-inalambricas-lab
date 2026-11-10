@@ -20,8 +20,11 @@ if [ -n "${SUDO_USER:-}" ] && [ "$SUDO_USER" != root ]; then
   H=$(getent passwd "$SUDO_USER" 2>/dev/null | cut -d: -f6); [ -d "$H" ] && HOME="$H"
 fi
 DIR="$HOME/entrega-$TP"
+# Las VMs del laboratorio suelen llamarse igual (localhost): el final de la MAC distingue server y client
+MACID=$(ip -o link 2>/dev/null | awk '{for (i = 1; i < NF; i++) if ($i == "link/ether") {print $(i + 1); exit}}' | tr -d ':' | tail -c 5)
+NOMBRE="entrega-$TP-$APE-$HOST${MACID:+-$MACID}"
 TMP=$(mktemp -d 2>/dev/null || { mkdir -p "/tmp/emp-$$"; echo "/tmp/emp-$$"; })
-OUT="$TMP/entrega-$TP-$APE-$HOST"
+OUT="$TMP/$NOMBRE"
 mkdir -p "$OUT"/{sesiones,capturas,config,estado,sistema,extra}
 AVISOS="$OUT/AVISOS.txt"; : > "$AVISOS"
 aviso() { echo "AVISO: $*" | tee -a "$AVISOS"; }
@@ -64,6 +67,17 @@ done | grep -v 'capturas-referencia' | sort -u | while read -r p; do
 done
 ls "$OUT/capturas/"* >/dev/null 2>&1 || aviso "no se encontró ninguna captura .pcap"
 
+# Logs que guardaste durante el TP (por ejemplo hostapd -f, wpa_supplicant -f, freeradius -X > archivo.log)
+if [ -n "$REF" ]; then
+  mkdir -p "$OUT/extra/logs"
+  for base in "$DIR" "$HOME" /root /tmp; do
+    [ -d "$base" ] && $SUDO find "$base" -xdev -maxdepth 3 -type f \( -name '*.log' -o -name '*.txt' \) -size -5M -newer "$REF" 2>/dev/null
+  done | grep -vE '/sesiones/|/\.|redes-inalambricas-lab|/entregas-listas/' | grep -vF "$TMP" | sort -u | while read -r p; do
+    $SUDO cp -p "$p" "$OUT/extra/logs/$(printf '%s' "${p#/}" | tr '/' '_')" 2>/dev/null
+  done
+  $SUDO chmod -R a+r "$OUT/extra" 2>/dev/null
+fi
+
 # 3. Configuraciones (sólo las que existan; se omiten claves privadas) -------------------------------------------
 copiar() { for f in "$@"; do
   [ -e "$f" ] || continue
@@ -71,7 +85,8 @@ copiar() { for f in "$@"; do
   $SUDO cp -rpL --parents "$f" "$OUT/config/" 2>/dev/null; done; }
 copiar /etc/netplan/*.yaml /etc/network/interfaces /etc/network/interfaces.d/* /etc/systemd/network/* \
        /etc/dnsmasq.conf /etc/dnsmasq.d/* /etc/hosts /etc/sysctl.conf /etc/sysctl.d/* /etc/nftables.conf \
-       /etc/hostapd/* /etc/wpa_supplicant/* /etc/freeradius/3.0/clients.conf \
+       /etc/hostapd/*.conf /etc/hostapd/*.vlan /etc/hostapd/*.eap_user /etc/wpa_supplicant/*.conf \
+       /etc/freeradius/3.0/clients.conf \
        /etc/freeradius/3.0/mods-config/files/authorize /etc/freeradius/3.0/users \
        /etc/freeradius/3.0/sites-enabled/* /etc/freeradius/3.0/mods-enabled/eap
 # archivos de trabajo del alumno (hostapd*.conf, wpa*.conf, portal.py, *.nft, *.rsc...) creados durante el TP
@@ -131,17 +146,18 @@ $SUDO chmod -R a+r "$OUT/sistema" 2>/dev/null
 
 # 6. Manifiesto y archivo final -----------------------------------------------------------------------------------
 ( cd "$OUT" && find . -type f ! -name MANIFIESTO.sha256 -exec sha256sum {} + 2>/dev/null | sort -k2 > MANIFIESTO.sha256 )
-FINAL="$HOME/entrega-$TP-$APE-$HOST.tar.gz"
+FINAL="$HOME/$NOMBRE.tar.gz"
 if tar -czf "$FINAL" -C "$TMP" "$(basename "$OUT")" 2>/dev/null; then :; else echo "ERROR: no se pudo crear $FINAL"; exit 1; fi
+RESUMEN=$(sed 's/^AVISO: /  - /' "$AVISOS" 2>/dev/null)
 rm -rf "$TMP"
-[ -n "${SUDO_USER:-}" ] && chown "$SUDO_USER:" "$FINAL" 2>/dev/null
+mkdir -p "$HOME/entregas-listas" && cp -p "$FINAL" "$HOME/entregas-listas/"      # carpeta que comparte servir.sh
+[ -n "${SUDO_USER:-}" ] && chown -R "$SUDO_USER:" "$FINAL" "$HOME/entregas-listas" 2>/dev/null
 TAM=$(du -k "$FINAL" | cut -f1)
 
 echo
 echo "Listo: $FINAL  (${TAM} KB)"
-[ -s "$AVISOS" ] && { echo "Revisá estos avisos:"; sed 's/^/  - /' "$AVISOS"; }
-
+[ -n "$RESUMEN" ] && { echo "Revisá estos avisos antes de entregar:"; echo "$RESUMEN"; }
 if [ "$TAM" -gt 9500 ]; then
   echo "AVISO: pesa más de 9,5 MB y Discord no lo acepta. Borrá capturas que no sean del TP y volvé a empaquetar."
 fi
-echo "Copiá ese archivo a tu computadora (ver entrega/README.md, paso 4) y subilo a tu canal privado entrega-tu-nombre en Discord."
+echo "Para bajarlo a tu computadora:  bash $(cd "$(dirname "$0")" && pwd)/servir.sh   (y subilo a tu canal privado entrega-tu-nombre)"

@@ -35,6 +35,7 @@ EOF
 echo
 echo "Grabando la sesión $N del $TP en $DIR/sesiones/"
 echo "Trabajá normalmente (también con sudo o dentro de los namespaces). Para terminar: exit"
+echo "Si abrís otra terminal para este TP, corré grabar.sh $TP también ahí."
 echo "Guardá tus capturas .pcap en $DIR/ (empaquetar.sh también busca las que dejes en otro lado)."
 echo
 
